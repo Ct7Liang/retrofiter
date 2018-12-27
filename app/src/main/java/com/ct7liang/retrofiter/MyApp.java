@@ -5,12 +5,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
-
+import android.util.Log;
 import com.google.gson.Gson;
-
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -31,13 +30,20 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
 
+        //外部存储
+        File httpCacheDirectory = new File(this.getExternalCacheDir(), "aaaaaa");
+        httpCacheDirectory.mkdirs();
+
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(3, TimeUnit.MINUTES)    //设置连接最大时长
                 .readTimeout(180, TimeUnit.SECONDS)     //设置读取最大时长
                 .writeTimeout(180, TimeUnit.SECONDS)    //设置写入最大时长
                 .retryOnConnectionFailure(true)     //默认重试一次，若需要重试N次，则要实现拦截器
                 .cache(new Cache(this.getCacheDir(), 10*1024*1024)) //为OkHttpClient设置Cache，否则缓存不会生效（retrofit并未置默认缓存目录）
-                .addInterceptor(new RetryInterceptor(3))
+//                .addInterceptor(new RetryInterceptor(3))
+                .addInterceptor(new CommonNoNetCache(24*60*60*28, this))
+                .addNetworkInterceptor(new CommonNetCache(120))
                 .build();
 
 //        addNetworkInterceptor添加的是网络拦截器，在网络畅通的时候会调用，而addInterceptor则都会调用。
@@ -95,6 +101,7 @@ public class MyApp extends Application {
     }
 
 
+
     /**
      * 设置没有网络的情况下，
      *  的缓存时间
@@ -123,6 +130,7 @@ public class MyApp extends Application {
                 request = request.newBuilder()
                         .cacheControl(tempCacheControl)
                         .build();
+                Log.i("huangjiepan", "intercept:no network ");
             }
             return chain.proceed(request);
         }
@@ -187,6 +195,8 @@ public class MyApp extends Application {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo();
     }
+
+
 
 
 }

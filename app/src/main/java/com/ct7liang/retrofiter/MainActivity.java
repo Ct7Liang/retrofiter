@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
  * Simple4Activity.class    --->    @FormUrlEncoded @Field @FieldMap @Query @QueryMap
  * Simple5Activity.class    --->    @Multipart @Part @PartMap
  * Simple6Activity.class    --->    Converter数据转换
+ * Simple7Activity.class    --->    @Streaming文件下载
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(this, Simple6Activity.class));
+//        startActivity(new Intent(this, Simple6Activity.class));
+        startActivity(new Intent(this, Simple7Activity.class));
     }
 }
