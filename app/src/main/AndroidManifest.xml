@@ -17,8 +17,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,7 +28,7 @@
         <activity android:name=".Simple4Activity" />
         <activity android:name=".Simple5Activity" />
         <activity android:name=".Simple6Activity" />
-        <activity android:name=".Simple7Activity"></activity>
+        <activity android:name=".Simple7Activity"/>
     </application>
 
 </manifest>
