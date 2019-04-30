@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -50,8 +51,9 @@ public class MyApp extends Application {
 
         retrofit = new Retrofit.Builder()
                     //设置网络请求的网络路径,必须以"/"结束,否则会报错
-                .baseUrl("http://47.96.3.246:3080/zzd_cp/")
+                .baseUrl("https://www.wanandroid.com/")
                     //非必须设置,用于@Body注解和自定义请求返回值类型
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())  //解决Rxjava+RxAndroid+Retrofit组合时Unable to create call adapter for rx.Observable
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                     //设置请求client, client可以设置超时时间和重试
                 .client(client)

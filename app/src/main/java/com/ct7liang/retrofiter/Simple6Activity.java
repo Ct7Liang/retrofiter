@@ -11,6 +11,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import rx.Observable;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 interface Network6Service{
 
@@ -25,6 +30,14 @@ interface Network6Service{
      */
     @POST("loginController.do?checkuser")
     Call<User> login2(@Query("userName") String username, @Query("password") String password, @Query("pid") String pid);
+
+    @POST("user/register")
+    Call<ResponseBody> login3(@Query("username") String name, @Query("password") String pswd, @Query("repassword") String repswd);
+
+    @POST("user/register")
+    Observable<ResponseBody> login4(@Query("username") String name, @Query("password") String pswd, @Query("repassword") String repswd);
+
+
 }
 
 public class Simple6Activity extends AppCompatActivity {
@@ -38,7 +51,7 @@ public class Simple6Activity extends AppCompatActivity {
 
         network6Service = MyApp.retrofit.create(Network6Service.class);
 
-        simple2();
+        simple4();
     }
 
     /**
@@ -80,6 +93,42 @@ public class Simple6Activity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void simple3(){
+        Call<ResponseBody> regist = network6Service.login3("ct7liang", "123456", "123456");
+        regist.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //获取转换后的数据模型
+                ResponseBody body = response.body();
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+    private void simple4(){
+        Observable<ResponseBody> register = network6Service.login4("ct7liang123", "123456", "123456");
+        register.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResponseBody>() {
+            @Override
+            public void call(ResponseBody responseBody) {
+                //获取转换后的数据模型
+                ResponseBody body = responseBody;
+                try {
+                    String string = body.string();
+                    int length = string.length();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 }
 
 

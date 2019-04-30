@@ -21,6 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        startActivity(new Intent(this, Simple6Activity.class));
-        startActivity(new Intent(this, Simple7Activity.class));
+        startActivity(new Intent(this, Simple6Activity.class));
     }
 }
